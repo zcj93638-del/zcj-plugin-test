@@ -1,6 +1,6 @@
 {
   "name": "seek",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "配置 Trim Seek 地址、查询项目并查阅 Seek OpenAPI 接口。",
   "mcpServers": "./.mcp.json",
   "skills": "./skills/",

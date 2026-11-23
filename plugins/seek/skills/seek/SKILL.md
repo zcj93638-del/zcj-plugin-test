@@ -7,6 +7,8 @@ description: 配置 Trim Seek 连接、查询项目，以及根据 Seek OpenAPI 
 - 在处理 Seek 业务请求前，调用 seek_status 检查 configured，若未就绪，返回提示并停止。设置页可用 seek_settings_read 查看地址和账号。避免读取原始会话配置文件。
 - 查询项目数量或列表时，调用 seek_projects。其他 JSON 业务接口可通过 seek_api 传入 method、path 和可选的 payload，使用已保存的会话。依据实际响应作答。
 
+- 用户要求上传素材时使用 `seek_upload`。仅传用户指定的文件在插件运行机器上可读的绝对路径，先解析目标项目和项目内的文件夹 GUID。聊天附件没有可用路径时请用户提供路径。一次上传一个文件，同名默认 `keepBoth`；只有用户要求覆盖时传 `overwrite`。`skip` 返回的 GUID 也可能属于已有文件。
+
 ## 按任务查找 API
 
 用户询问 Seek 的能力、请求示例或需要调用接口时，先检索本技能的 [接口索引](references/api-index.md)，再按行号读取[随包 OpenAPI 文档](references/trim-seek.openapi.yaml)中的路径条目。例如，按关键字跨项目找素材可查“全局标准搜索”，按画面描述找素材可查“执行 AI 搜索”，给素材打标签可查“修改标签”。

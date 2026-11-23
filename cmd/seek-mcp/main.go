@@ -12,7 +12,7 @@ import (
 
 type obj = map[string]any
 
-const version = "0.3.0"
+const version = "0.4.0"
 const readTool = "seek_settings_read"
 const updateTool = "seek_settings_update"
 
@@ -32,6 +32,7 @@ func tools() []obj {
 	set["minProperties"] = 1
 	readOnly := obj{"readOnlyHint": true}
 	return []obj{
+		uploadTool(),
 		{"name": readTool, "description": "读取 Seek 连接设置。", "annotations": readOnly, "inputSchema": schema(obj{}), "outputSchema": schema(obj{"schema": object, "values": object, "layout": obj{"type": "array", "items": object}}, "schema", "values")},
 		{"name": updateTool, "description": "更新连接设置，提交密码时登录。", "inputSchema": schema(obj{"set": set}, "set"), "outputSchema": schema(obj{"values": object}, "values")},
 		{"name": "seek_status", "description": "检查本地是否已配置登录会话。", "annotations": readOnly, "inputSchema": schema(obj{})},
@@ -72,6 +73,12 @@ func (s store) call(p callParams) (obj, error) {
 		return obj{"schema": schema(fields), "values": c.values(), "layout": []obj{{"kind": "group", "title": "Seek 连接", "items": items}}}, nil
 	case "seek_status":
 		return obj{"configured": c.ready()}, nil
+	case "seek_upload":
+		var a uploadArgs
+		if json.Unmarshal(p.Arguments, &a) != nil {
+			return nil, errors.New("上传参数无效。")
+		}
+		return c.upload(a)
 	case "seek_projects":
 		data, err := c.api("GET", "/api/v1/project/list", nil)
 		if err != nil {

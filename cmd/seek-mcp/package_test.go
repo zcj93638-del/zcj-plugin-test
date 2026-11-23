@@ -5,12 +5,14 @@ import (
 	"crypto/md5"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
 	"testing"
 )
@@ -42,6 +44,8 @@ func TestPackagedLoginAndProjects(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
 	t.Setenv("USERPROFILE", home)
+	content := []byte{0, 255, 13, 10, 42}
+	filename := "上传 测试.bin"
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case "/seek/api/v1/auth/user/loginByPassword":
@@ -53,6 +57,44 @@ func TestPackagedLoginAndProjects(t *testing.T) {
 			}
 			http.SetCookie(w, &http.Cookie{Name: "seek-token", Value: "test-session", HttpOnly: true})
 			fmt.Fprint(w, `{"code":0,"data":null}`)
+		case "/seek/upload/api/v1/asset":
+			cookie, err := r.Cookie("seek-token")
+			if r.Method != "POST" || err != nil || cookie.Value != "test-session" || r.ContentLength <= int64(len(content)) {
+				http.Error(w, "invalid upload headers", 400)
+				return
+			}
+			parts, err := r.MultipartReader()
+			if err != nil {
+				http.Error(w, "need multipart", 400)
+				return
+			}
+			fields := map[string]string{}
+			for {
+				part, err := parts.NextPart()
+				if err != nil {
+					http.Error(w, "missing file", 400)
+					return
+				}
+				data, err := io.ReadAll(part)
+				if err != nil {
+					http.Error(w, "incomplete part", 400)
+					return
+				}
+				if part.FormName() != "file" {
+					fields[part.FormName()] = string(data)
+					continue
+				}
+				if part.FileName() != filename || !bytes.Equal(data, content) || fields["size"] != strconv.Itoa(len(content)) || fields["projectGuid"] != "abc" || fields["parentFolderGuid"] != "folder" || fields["onNameConflict"] != "keepBoth" {
+					http.Error(w, "invalid multipart fields or file", 400)
+					return
+				}
+				break
+			}
+			if _, err = parts.NextPart(); err != io.EOF {
+				http.Error(w, "file must be last", 400)
+				return
+			}
+			fmt.Fprint(w, `{"code":0,"data":{"guid":"uploaded-id"}}`)
 		case "/seek/api/v1/project/list":
 			cookie, e := r.Cookie("seek-token")
 			if e != nil || cookie.Value != "test-session" {
@@ -115,6 +157,13 @@ func TestPackagedLoginAndProjects(t *testing.T) {
 	data := tool("seek_api", obj{"method": "GET", "path": "/api/v1/project/list"})
 	if data["data"].(obj)["list"] == nil {
 		t.Fatal(data)
+	}
+	source := filepath.Join(home, filename)
+	if err := os.WriteFile(source, content, 0600); err != nil {
+		t.Fatal(err)
+	}
+	if result := tool("seek_upload", obj{"projectGuid": "abc", "parentFolderGuid": "folder", "filePath": source}); result["guid"] != "uploaded-id" {
+		t.Fatal(result)
 	}
 	saved, err := os.ReadFile(filepath.Join(home, ".config", "trim-seek-codex", "connection.json"))
 	if err != nil || strings.Contains(string(saved), "test-password") {

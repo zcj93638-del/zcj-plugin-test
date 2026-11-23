@@ -89,14 +89,19 @@ func (c connection) request(method, path string, body json.RawMessage) (json.Raw
 	if err != nil {
 		return nil, nil, err
 	}
-	req.Header.Set("Accept", "application/json")
+
 	if len(body) > 0 {
 		req.Header.Set("Content-Type", "application/json")
 	}
+	return c.send(client, req)
+}
+
+func (c connection) send(httpClient *http.Client, req *http.Request) (json.RawMessage, []*http.Cookie, error) {
+	req.Header.Set("Accept", "application/json")
 	if c.Token != "" {
 		req.AddCookie(&http.Cookie{Name: "seek-token", Value: strings.Trim(c.Token, `"`)})
 	}
-	r, err := client.Do(req)
+	r, err := httpClient.Do(req)
 	if err != nil {
 		return nil, nil, fmt.Errorf("连接 Seek 失败：%w", err)
 	}

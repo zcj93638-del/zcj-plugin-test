@@ -1,5 +1,5 @@
 {
   "mcpServers": {
-    "seek": {"command": "cmd.exe", "args": ["/d", "/c", ".\\bin\\start.cmd"], "cwd": "."}
+    "seek": {"command": "cmd.exe", "args": ["/d", "/c", ".\\bin\\start.cmd"], "cwd": ".", "tool_timeout_sec": 1810}
   }
 }

@@ -17,7 +17,7 @@ class SeekSettings extends TypertRemoteService {
   }
 }
 export function apply(ctx) {
-  ctx.plugin(mcp, {transport: 'stdio', serverName: 'trim-seek', command: executable(), args: []})
+  ctx.plugin(mcp, {transport: 'stdio', serverName: 'trim-seek', command: executable(), args: [], toolCallTimeoutMs: 1810000})
   ctx.inject(['typert'], sub => {
     new SeekSettings(sub)
     const dispose = sub.typert.register({package: contract.pkg, face: 'host', schemas: [],

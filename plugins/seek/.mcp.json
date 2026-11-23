@@ -1,5 +1,5 @@
 {
   "mcpServers": {
-    "seek": {"command": "/bin/sh", "args": ["./bin/start.sh"], "cwd": "."}
+    "seek": {"command": "/bin/sh", "args": ["./bin/start.sh"], "cwd": ".", "tool_timeout_sec": 1810}
   }
 }

@@ -32,6 +32,10 @@ codex plugin add seek@trim-local
 
 已装 0.1.7 的用户先刷新市场 `codex plugin marketplace upgrade trim-local`，移除旧插件 `codex plugin remove seek@trim-local`，再安装对应平台的版本并重开 Codex。若市场来自本地解压目录，请先更新目录中的文件。升版可沿用已有的 NAS 会话。
 
+## 上传素材
+
+登录后可以说「把 `/Users/me/Downloads/封面.png` 上传到『宣传片』项目的根目录」。Windows 请提供本机绝对路径，例如 `C:\Users\me\Pictures\封面.png`。也可以指定项目内的目标文件夹。每次上传一个文件，同名默认保留两份，成功后返回素材 GUID。聊天附件需要有插件所在电脑可读取的本地路径。
+
 ## 连接 NAS
 
 打开插件的「管理 → Seek 连接」，填入 NAS 地址、Seek 账号，然后输入密码登录。只填 IP 时默认使用 HTTP 和 5666 端口；完整 URL 使用指定协议和端口。成功后可以问「我有哪些项目？」。密码仅用于本次登录，会话保存在当前用户的 `.config/trim-seek-codex/connection.json` 中。HTTP 连接不会加密登录摘要和 Cookie。
