@@ -1,0 +1,32 @@
+{
+  "name": "trim-local",
+  "interface": {
+    "displayName": "Trim Seek"
+  },
+  "plugins": [
+    {
+      "name": "seek",
+      "source": {
+        "source": "local",
+        "path": "./plugins/seek"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "seek-windows",
+      "source": {
+        "source": "local",
+        "path": "./plugins/seek-windows"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

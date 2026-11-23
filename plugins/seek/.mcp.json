@@ -1,0 +1,5 @@
+{
+  "mcpServers": {
+    "seek": {"command": "/bin/sh", "args": ["./bin/start.sh"], "cwd": "."}
+  }
+}

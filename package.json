@@ -1,0 +1,26 @@
+{
+  "name": "dsh-trim-seek",
+  "version": "0.3.0",
+  "description": "Trim Seek · 连接 NAS 素材库",
+  "type": "module",
+  "main": "./deepseek/host.js",
+  "icon": "./plugins/seek/assets/seek.png",
+  "exports": {
+    ".": "./deepseek/host.js",
+    "./client": "./deepseek/client.cjs",
+    "./package.json": "./package.json"
+  },
+  "files": ["deepseek", "plugins/seek/bin", "plugins/seek/assets", "plugins/seek/licenses", "plugins/seek/skills", "plugins/seek-windows/bin", "plugins/seek-windows/licenses"],
+  "dsh": {
+    "bundle": { "patch": "./deepseek/cordis.patch.yml" },
+    "client": { "platform": "web", "inject": ["@deepseek-ai/dsh-api-remotes", "@deepseek-ai/dsh-client-ui-settings"] }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-mcp-client": "*",
+    "@deepseek-ai/dsh-typert-protocol": "*"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh-mcp-client": { "optional": true },
+    "@deepseek-ai/dsh-typert-protocol": { "optional": true }
+  }
+}

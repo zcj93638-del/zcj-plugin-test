@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trim Seek · 连接设置</title>
+<style>
+* { box-sizing: border-box }
+body { margin:0; background:#f4f5f3; color:#202821; font:16px/1.55 Inter,system-ui,sans-serif }
+main { max-width:480px; margin:10vh auto; padding:32px; background:white; border:1px solid #dce0d9; border-radius:16px }
+h1 { font-size:24px; margin:0 0 24px }
+label { display:block; font-weight:600; margin-top:20px }
+input,button { width:100%; padding:12px; font:inherit; border-radius:8px }
+input { border:1px solid #a7afa8; margin-top:6px }
+button { background:#234e37; color:white; border:0; margin-top:18px; cursor:pointer }
+small { color:#535e56 }
+output { display:block; font-weight:600; margin-top:16px }
+</style>
+<main><h1>连接 Trim Seek</h1><form method="post">
+<label>NAS 地址<input name="address" placeholder="http://192.168.9.118:5666/seek/" value="{{.Address}}" required></label>
+<small>仅填 IP 默认使用 HTTP 和端口 5666。</small>
+<label>Seek 账号<input name="username" value="{{.Username}}" autocomplete="username" required></label>
+<small>当前测试阶段暂用 Seek 账号和密码登录，后续将改用 API Key。</small>
+<label>密码<input name="password" type="password" autocomplete="current-password" required></label>
+<button>登录</button></form><output role="status">{{.Message}}</output></main></html>

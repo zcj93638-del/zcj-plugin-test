@@ -1,0 +1,15 @@
+{
+  "name": "seek-windows",
+  "version": "0.3.0",
+  "description": "配置 Trim Seek 地址、查询项目并查阅 Seek OpenAPI 接口。",
+  "mcpServers": "./.mcp.json",
+  "skills": "./skills/",
+  "onboardingSkill": "./skills/seek/SKILL.md",
+  "interface": {
+    "displayName": "Trim Seek (Windows)",
+    "logo": "./assets/seek.png",
+    "composerIcon": "./assets/seek.png",
+    "shortDescription": "连接 NAS 素材库",
+    "developerName": "Trim Seek"
+  }
+}
